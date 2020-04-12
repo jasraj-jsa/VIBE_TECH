@@ -51,9 +51,17 @@ router.route("/:username/:postId")
     .delete((req, res, next) => {
         Posts.findByIdAndDelete({ _id: req.params.postId })
             .then(() => {
-                res.status(200).json({});
-                next();
+                Users.findOne({ username: req.params.username })
+                    .then((user) => {
+                        user.posts = user.posts.filter((item) => {
+                            return item != req.params.postId;
+                        })
+                        user.save();
+                        res.status(200).json({});
+                        next();
+                    })
             })
+
             .catch(err => console.log(err));
     })
     .put((req, res, next) => {

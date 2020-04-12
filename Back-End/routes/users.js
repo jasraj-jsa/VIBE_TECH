@@ -59,8 +59,7 @@ router.route("/")
         var o = []
         for (var i = 0; i < users.length; i++)
           o.push(users[i])
-        res.statusCode = 200;
-        res.send(o);
+        res.status(200).json({ users: o });
         next();
       })
   })
@@ -164,7 +163,7 @@ router.route("/:username/friends")
         else {
           if (user.request.length != 0) {
             user.friends = user.friends.filter(function (item) {
-              return !user.requests.includes(item.username);
+              return !user.request.includes(item.username);
             });
           }
           if (user.friends.length == 0) {
@@ -283,12 +282,11 @@ router.route("/:username/requestsSent")
     Users.findOne({ username: req.params.username })
       .then((user) => {
         user.request = (user.request).filter((item) => { return (item != req.body.username) });
-        console.log(user.request);
         user.save();
         Users.findOne({ username: req.body.username })
-          .then((user) => {
-            user.requestsSent = user.requestsSent.filter((item) => { return item != req.params.username });
-            user.save();
+          .then((us) => {
+            us.requestsSent = us.requestsSent.filter((item) => { return item != req.params.username });
+            us.save();
             res.status(200).json({});
           })
           .catch(err => console.log(err));

@@ -6,6 +6,7 @@ import {
     Form, FormGroup, Input, Label, ButtonGroup
 } from 'reactstrap';
 import ReactDOM from "react-dom";
+import Toast from "light-toast";
 class UserPostsComponent extends Component {
     constructor(props) {
         super(props);
@@ -187,7 +188,7 @@ class UserPostsComponent extends Component {
                                 <Input id="bio" name="bio" type="textarea" rows="3" value={this.state.bio} onChange={this.handleInputChange} />
                             </FormGroup>
                             <ButtonGroup>
-                                <Button size="sm" color="success" outline onClick={() => { this.addToBio(); this.setBio(); }}><span className="fa fa-check fa-lg"></span> Save</Button>
+                                <Button size="sm" color="success" outline onClick={() => { this.addToBio(); this.setBio(); Toast.success("Bio successfully modified", 1000, () => { }); }}><span className="fa fa-check fa-lg"></span> Save</Button>
                                 <Button size="sm" style={{ marginLeft: 10 }} color="danger" outline onClick={() => { this.setBio(); document.getElementById("bio").value = this.state.bio; }} ><span className="fa fa-times fa-lg"></span> Discard</Button>
                             </ButtonGroup>
 
@@ -201,11 +202,11 @@ class UserPostsComponent extends Component {
             </div>
             );
         }
-        function RenderCard({ user, post, current, h }) {
+        function RenderCard({ post, h }) {
             return (
                 <CardBody>
                     <CardTitle>{post.heading}</CardTitle>
-                    <CardSubtitle>{"Posted By: " + (user == current ? "You" : user)}</CardSubtitle>
+                    <CardSubtitle>Posted By: YOU </CardSubtitle>
                     <Button style={{ marginLeft: 800 }} outline color="danger" onClick={() => { h.setState({ postId: post._id }, () => { h.delete(); }); }} ><span className="fa fa-trash fa-lg"></span></Button>
                     <br /><br /><CardSubtitle style={{ marginLeft: 800 }}>{post.postedAt}</CardSubtitle>
                     <br /><CardText>{post.description}</CardText>
@@ -213,11 +214,11 @@ class UserPostsComponent extends Component {
             );
 
         }
-        function RenderAll({ posts, current, h }) {
+        function RenderAll({ posts, h }) {
             var x = posts.map((p) =>
                 <>
                     <Card>
-                        <RenderCard user="klaus" post={p} current={current} h={h} />
+                        <RenderCard post={p} h={h} />
                     </Card><br />
                 </>
             );
@@ -237,7 +238,7 @@ class UserPostsComponent extends Component {
                 <div className="container">
                     <div className="row align-items-start">
                         <div className="col-12 col-md m-1">
-                            <RenderAll posts={this.state.myposts} current={this.props.current} h={this} />
+                            <RenderAll posts={this.state.myposts} h={this} />
                         </div>
                     </div>
                 </div>
@@ -276,7 +277,7 @@ class UserPostsComponent extends Component {
                                 <Input id="bio" name="bio" type="textarea" rows="3" value={this.state.bio} onChange={this.handleInputChange} />
                             </FormGroup>
                             <ButtonGroup>
-                                <Button size="sm" color="success" outline onClick={() => { this.addToBio(); this.setBio(); }}><span className="fa fa-check fa-lg"></span> Save</Button>
+                                <Button size="sm" color="success" outline onClick={() => { this.addToBio(); this.setBio(); Toast.success("Bio successfully modified", 1000, () => { }); }}><span className="fa fa-check fa-lg"></span> Save</Button>
                                 <Button size="sm" style={{ marginLeft: 10 }} color="danger" outline onClick={() => { this.setBio(); document.getElementById("bio").value = this.state.bio; }} ><span className="fa fa-times fa-lg"></span> Discard</Button>
                             </ButtonGroup>
 

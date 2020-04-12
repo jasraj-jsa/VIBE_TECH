@@ -13,6 +13,7 @@ const SearchEngine = require("./routes/searchEngine");
 const CurrentUser = require("./routes/currentUser");
 const postsRouter = require("./routes/posts");
 const commentRouter = require("./routes/comments");
+const recommendation = require("./routes/recommendenation");
 mongoose.connect(url)
   .then((db) => {
     console.log("\t\t\t\t\t\tSucessfully connected to the server!!\n");
@@ -36,6 +37,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
 app.use('/comments', commentRouter);
+app.use("/recommendations", recommendation);
 app.get('/checkToken', withAuth, function (req, res) {
   res.sendStatus(200);
 });

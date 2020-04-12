@@ -6,6 +6,7 @@ import {
 } from 'reactstrap';
 import { NavLink } from 'react-router-dom';
 import { withRouter } from 'react-router'
+import logo from "../images/logo.png";
 class UserHeader extends Component {
     constructor(props) {
         super(props);
@@ -35,7 +36,7 @@ class UserHeader extends Component {
                 <Navbar dark expand="md">
                     <div className="container">
                         <NavbarToggler />
-                        <NavbarBrand className="mr-auto" href="/"><img src='../public/assets/images/logo.png' height="35" width="35" alt='V.I.B.E. Tech' /></NavbarBrand>
+                        <NavbarBrand className="mr-auto" href="/auth/search"><img src={logo} height="35" width="35" alt='V.I.B.E. Tech' /></NavbarBrand>
                         <Collapse navbar>
                             <Nav navbar>
                                 <NavItem>
@@ -48,7 +49,7 @@ class UserHeader extends Component {
                                     <NavLink className="nav-link" to='/auth/mypage'><span className="fa fa-user-circle fa-lg"></span> My Page</NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink className="nav-link" to='/contact'><span className="fa fa-address-card fa-lg"></span> Contact Us</NavLink>
+                                    <NavLink className="nav-link" to='/auth/recommendations'><span className="fa fa-address-card fa-lg"></span> Recommendations</NavLink>
                                 </NavItem>
                                 <NavItem>
                                     <Label style={{ marginLeft: 150, color: 'grey' }}> <h2><b>Welcome, {this.props.current}</b></h2></Label>

@@ -6,6 +6,8 @@ import {
     CardTitle, CardSubtitle, Spinner, Button, Modal, ModalHeader, ModalBody,
     Form, FormGroup, Input, Label, ButtonGroup, Media, Alert
 } from 'reactstrap';
+import userimg from "../images/userimg.png";
+import Toast from "light-toast";
 class FeedComponent extends Component {
     constructor(props) {
         super(props);
@@ -37,10 +39,7 @@ class FeedComponent extends Component {
         //this.posts();
         this.fetchRequestsSent(0);
     }
-    componentWillMount() {
-        this.fetchFriends();
-        //this.posts();
-    }
+
 
 
     checkLike(pid) {
@@ -278,9 +277,13 @@ class FeedComponent extends Component {
             .then((data) => {
                 if (data != "null" && data.body.length) {
                     var post = data.body;
-                    post[0].username = user;
-                    post[0].liked = false;
-                    var joined = this.state.allposts.concat(post);
+                    var joined = this.state.allposts;
+                    for (var i = 0; i < post.length; i++) {
+                        post[i].username = user;
+                        if (!joined.includes(post[i])) {
+                            joined.push(post[i]);
+                        }
+                    }
                     this.setState({ allposts: joined });
                 }
             })
@@ -301,7 +304,7 @@ class FeedComponent extends Component {
                 <div>
                     <h2 style={{ marginTop: 150, marginRight: 20 }} >Your friends are missing!
                     <ButtonGroup>
-                            <Button color="primary" style={{ marginLeft: 20 }} outline onClick={h.setNewFriend}><span className="fa fa-user-plus fa-lg"></span> Add friends</Button>
+                            <Button color="primary" style={{ marginLeft: 20 }} outline onClick={h.setNewFriend}><span className="fa fa-user-plus fa-lg"></span> Add Contacts</Button>
                             <Button color="info" style={{ marginLeft: 10 }} outline onClick={h.setRequests}><span className="fa fa-th-list fa-lg"></span> Requests</Button>
                         </ButtonGroup>
                     </h2>
@@ -334,7 +337,7 @@ class FeedComponent extends Component {
         }
         else if (this.state.allposts.length == 0) {
             var h = this;
-            return (<div><><h2 style={{ marginTop: 150, marginRight: 10 }}>Your friends haven't posted anything!<Button onClick={this.setFriends} color="primary" style={{ marginLeft: 10 }} outline><span className="fa fa-users fa-lg"></span> My Friends</Button></h2><div style={{ marginTop: 150 }}></div></>
+            return (<div><><h2 style={{ marginTop: 150, marginRight: 10 }}>Your friends haven't posted anything!<Button onClick={this.setFriends} color="primary" style={{ marginLeft: 10 }} outline><span className="fa fa-users fa-lg"></span> My Contacts</Button></h2><div style={{ marginTop: 150 }}></div></>
 
                 <Modal isOpen={h.state.isFriendsOpen} toggle={h.setFriends} onClosed={() => { this.componentDidMount(); }}>
                     <ModalHeader toggle={h.setFriends}>Friends</ModalHeader>
@@ -352,14 +355,20 @@ class FeedComponent extends Component {
             return (
                 <Media id={"render" + user.username} >
                     <Media>
-                        <Media object data-src="../../assets/images/user.png" alt="Generic placeholder image" />
+                        <Media object src={userimg} style={{ maxHeight: 75, maxWidth: 75 }} alt="Generic placeholder image" />
                     </Media>
                     <Media body>
-                        <Media heading>
+                        <Media heading style={{ marginLeft: 10 }}>
                             {user.username}
                         </Media>
-                        <div id={"request" + user.username} ><Button style={{ marginLeft: 500 }} color="primary" onClick={() => { here.sendRequest(user.username); }} outline><span className="fa fa-user-plus fa-lg" ></span></Button></div>
-                        <Label>Bio: </Label> {user.bio}
+                        <Media style={{ marginLeft: 10 }}>
+                            Bio: {user.bio}
+                        </Media>
+                        <Media>
+                            <div id={"request" + user.username} ><Button style={{ marginLeft: 600 }} color="primary" onClick={() => { here.sendRequest(user.username); }} outline><span className="fa fa-user-plus fa-lg" ></span></Button></div>
+                        </Media>
+
+
                     </Media>
                 </Media>
             );
@@ -368,15 +377,15 @@ class FeedComponent extends Component {
             return (
                 <Media id={"renderRequest" + user}>
                     <Media>
-                        <Media object data-src="../../assets/images/user.png" alt="Generic placeholder image" />
+                        <Media object src={userimg} style={{ maxHeight: 75, maxWidth: 75 }} alt="Generic placeholder image" />
                     </Media>
                     <Media body>
-                        <Media heading>
+                        <Media heading style={{ marginLeft: 10 }}>
                             {user}
+                            <ButtonGroup style={{ marginLeft: 250 }}><Button onClick={() => { here.accept(user); }} outline color="success"><span className="fa fa-check fa-lg" ></span></Button>
+                                <Button style={{ marginLeft: 10 }} outline onClick={() => { here.reject(user); }} color="danger" > <span className="fa fa-times fa-lg"></span></Button>
+                            </ButtonGroup>
                         </Media>
-                        <ButtonGroup style={{ marginLeft: 200 }}><Button onClick={() => { here.accept(user); }} outline color="success"><span className="fa fa-check fa-lg" ></span></Button>
-                            <Button style={{ marginLeft: 10 }} outline onClick={() => { here.reject(user); }} color="danger" > <span className="fa fa-times fa-lg"></span></Button>
-                        </ButtonGroup>
                     </Media>
                 </Media>
             );
@@ -385,13 +394,13 @@ class FeedComponent extends Component {
             return (
                 <Media id={"renderFriend" + user}>
                     <Media>
-                        <Media object data-src="../../assets/images/user.png" alt="Generic placeholder image" />
+                        <Media object src={userimg} style={{ maxHeight: 75, maxWidth: 75 }} alt="Generic placeholder image" />
                     </Media>
                     <Media body>
-                        <Media heading>
+                        <Media heading style={{ marginLeft: 10 }}>
                             {user}
                         </Media>
-                        <Button style={{ marginLeft: 200 }} outline onClick={() => { here.removeFriend(user); }} color="danger" > <span className="fa fa-minus-circle fa-lg"></span></Button>
+                        <Button style={{ marginLeft: 300 }} outline onClick={() => { here.removeFriend(user); Toast.success("Removed from contacts", 1000, () => { }); }} color="danger" > <span className="fa fa-minus-circle fa-lg"></span></Button>
 
                     </Media>
                 </Media>
@@ -461,9 +470,9 @@ class FeedComponent extends Component {
         return (
             <>
                 <ButtonGroup style={{ marginTop: 20, marginRight: 665 }}>
-                    <Button color="primary" outline onClick={this.setFriends}><span className="fa fa-users fa-lg"></span> My Friends</Button>
+                    <Button color="primary" outline onClick={this.setFriends}><span className="fa fa-users fa-lg"></span> My Contacts</Button>
                     <Button color="primary" style={{ marginLeft: 10 }} outline onClick={this.setRequests}><span className="fa fa-th-list fa-lg"></span> Requests</Button>
-                    <Button color="primary" style={{ marginLeft: 10 }} outline onClick={this.setNewFriend}><span className="fa fa-user-plus fa-lg"></span> Add friends</Button>
+                    <Button color="primary" style={{ marginLeft: 10 }} outline onClick={this.setNewFriend}><span className="fa fa-user-plus fa-lg"></span> Add Contacts</Button>
                 </ButtonGroup><div style={{ marginTop: 30 }}>
                     <div className="container">
                         <div className="row align-items-start">
