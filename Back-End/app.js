@@ -41,13 +41,14 @@ app.use("/recommendations", recommendation);
 app.get('/checkToken', withAuth, function (req, res) {
   res.sendStatus(200);
 });
+app.use('/search', SearchEngine);
 app.use('/logout', logout);
 app.use("/current", CurrentUser);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
 });
-app.use('/search', SearchEngine);
+
 // error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development

@@ -12,35 +12,14 @@ class SearchEngine extends Component {
             query: ''
         }
     }
-    onSearch = (event) => {
-        event.preventDefault();
-        fetch('/search', {
-            method: 'POST',
-            body: JSON.stringify(this.state),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then((res) => console.log(res));
-    }
-    handleInputChange = (event) => {
-        const { value, name } = event.target;
-        this.setState({
-            [name]: value
-        });
-    }
     render() {
         return (
             <>
                 <Header />
-                <Form onSubmit={this.onSearch}>
+                <Form>
                     <FormGroup>
-                        <br /><Label><h2><b>V.I.B.E. </b><i>Search</i></h2></Label>
+                        <br /><Label><h2>Register/Sign-In to use <br /><br /><b>V.I.B.E. </b><i>Search</i></h2></Label>
                     </FormGroup>
-                    <FormGroup>
-                        <Label><Input type="text" id="search" name="query" placeholder="Ideate now..." size="100" onChange={this.handleInputChange} value={this.state.query} /></Label>
-                    </FormGroup>
-                    <Button type="submit" value="search" color="primary">Search</Button><br /><br />
                 </Form>
             </>
         );
