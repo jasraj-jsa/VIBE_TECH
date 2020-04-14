@@ -106,7 +106,7 @@ router.route("/:username")
       })
   })
   .put((req, res, next) => {
-    Users.find({ username: { $regex: req.params.username, $options: "i" } })
+    Users.find({ username: { $regex: '^' + req.params.username, $options: "i" } })
       .then((users) => {
         if (users.length == 0) {
           res.status(200).json({ error: "No users" });

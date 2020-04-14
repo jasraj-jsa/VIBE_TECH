@@ -188,6 +188,7 @@ class FeedComponent extends Component {
             this.setState({ users: '' });
             return null;
         }
+        console.log(this.state.username);
         fetch("/users/" + this.state.username, {
             method: "PUT",
             body: JSON.stringify({ current: this.props.current }),
@@ -339,7 +340,7 @@ class FeedComponent extends Component {
             var h = this;
             return (<div><><h2 style={{ marginTop: 150, marginRight: 10 }}>Your friends haven't posted anything!<Button onClick={this.setFriends} color="primary" style={{ marginLeft: 10 }} outline><span className="fa fa-users fa-lg"></span> My Contacts</Button></h2><div style={{ marginTop: 150 }}></div></>
 
-                <Modal isOpen={h.state.isFriendsOpen} toggle={h.setFriends} onClosed={() => { this.componentDidMount(); }}>
+                <Modal isOpen={h.state.isFriendsOpen} toggle={h.setFriends} onClosed={() => { window.location.reload(false); this.componentDidMount(); }}>
                     <ModalHeader toggle={h.setFriends}>Friends</ModalHeader>
                     <ModalBody>
                         <RenderAllFriends users={h.state.friends} here={h} />
@@ -482,7 +483,7 @@ class FeedComponent extends Component {
                         </div>
                     </div>
                 </div>
-                <Modal isOpen={h.state.isFriendsOpen} toggle={h.setFriends} onClosed={() => { this.componentDidMount(); }}>
+                <Modal isOpen={h.state.isFriendsOpen} toggle={h.setFriends} onClosed={() => { window.location.reload(false); this.componentDidMount(); }}>
                     <ModalHeader toggle={h.setFriends}>Friends</ModalHeader>
                     <ModalBody>
                         <RenderAllFriends users={h.state.friends} here={h} />
@@ -490,7 +491,7 @@ class FeedComponent extends Component {
                 </Modal>
 
 
-                <Modal size="lg" isOpen={h.state.isAddFriendsOpen} toggle={h.setNewFriend} onClosed={() => { this.componentDidMount(); document.getElementById("username").value = ""; }}>
+                <Modal size="lg" isOpen={h.state.isAddFriendsOpen} toggle={h.setNewFriend} onClosed={() => { window.location.reload(false); this.componentDidMount(); document.getElementById("username").value = ""; }}>
                     <ModalHeader toggle={h.setNewFriend}>Add a new friend</ModalHeader>
                     <ModalBody>
                         <Form>
@@ -505,7 +506,7 @@ class FeedComponent extends Component {
                     </ModalBody>
                 </Modal>
 
-                <Modal isOpen={h.state.isRequestsOpen} toggle={h.setRequests} onClosed={() => { this.componentDidMount(); }} >
+                <Modal isOpen={h.state.isRequestsOpen} toggle={h.setRequests} onClosed={() => { window.location.reload(false); this.componentDidMount(); }} >
                     <ModalHeader toggle={h.setRequests}>Requests</ModalHeader>
                     <ModalBody>
                         <RenderAllRequests users={h.state.requests} here={h} />

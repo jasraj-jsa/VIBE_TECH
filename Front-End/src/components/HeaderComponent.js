@@ -121,9 +121,6 @@ class Header extends Component {
                                     <NavLink className="nav-link" to='/aboutus'><span className="fa fa-info fa-lg"></span> About Us</NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink className="nav-link" to='/menu'><span className="fa fa-list fa-lg"></span> Menu</NavLink>
-                                </NavItem>
-                                <NavItem>
                                     <NavLink className="nav-link" to='/contact'><span className="fa fa-address-card fa-lg"></span> Contact Us</NavLink>
                                 </NavItem>
                             </Nav>
@@ -145,7 +142,7 @@ class Header extends Component {
                         <div className="row row-header">
                             <div className="col-12 col-sm-6">
                                 <h1>V.I.B.E.</h1>
-                                <p>We take inspiration from the World's best cuisines, and create a unique fusion experience. Our lipsmacking creations will tickle your culinary senses!</p>
+                                <p>Visionary Idea Browsing Environment is designed for all budding entrepreneurs across the globe. Its specifically designed for people who want to invent something of their own, the one who believe in developing something from scratch. </p>
                             </div>
                         </div>
                     </div>

@@ -133,10 +133,9 @@ class RecommendationComponent extends Component {
                 return null;
             }
             if (users.length == 0) {
-                setTimeout(() => {
 
-                    return <h2 style={{ marginDown: 150 }}>No recommendations found! Please add more posts!</h2>;
-                }, 1000);
+                return <h2 style={{ marginDown: 150 }}>No recommendations found! Please add more posts!</h2>;
+
             }
             var x = users.map((u) =>
                 <>
