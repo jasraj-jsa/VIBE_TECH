@@ -8,6 +8,7 @@ import {
 } from 'reactstrap';
 import userimg from "../images/userimg.png";
 import Toast from "light-toast";
+
 class FeedComponent extends Component {
     constructor(props) {
         super(props);
@@ -26,21 +27,27 @@ class FeedComponent extends Component {
             error: '',
             requests: [],
             isFriendsOpen: false,
+            isAddCommentOpen: false,
+            isViewCommentsOpen: false,
             isRequestsOpen: false,
             isAddFriendsOpen: false,
             friendName: '',
             requestsSent: [],
+            allComments: [],
+            myComment: '',
             lookCount: 0,
             postId: 0,
         }
     }
+    
     componentDidMount() {
         this.fetchFriends();
         //this.posts();
+        localStorage.clear();
         this.fetchRequestsSent(0);
     }
 
-
+    
 
     checkLike(pid) {
         var posts = this.state.allposts;
@@ -119,6 +126,39 @@ class FeedComponent extends Component {
                 }
             })
             .catch(err => console.log(err));
+    }
+    addComment(PostId){
+        var h = this;
+        let comm = localStorage.getItem("customComment");
+        fetch("/comments/" + PostId, {
+            method: "PUT",
+            body: JSON.stringify({ comment: comm, postedBy: h.props.current }),
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        })
+        .then((res) => {
+            if (res.status == 200) {
+                return res.json();
+            }
+            else {
+                return "null";
+            }
+        })
+    }
+    async viewComments(PostId){
+        let res = await fetch("/comments/" + PostId, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        });
+        if(res.status == 200){
+        const data = await res.json();
+        return data.comments;}
+        return [];
     }
     fetchRequestsSent(flag) {
         var h = this;
@@ -237,6 +277,13 @@ class FeedComponent extends Component {
     }
     setNewFriend() {
         this.setState({ isAddFriendsOpen: !this.state.isAddFriendsOpen });
+    }
+    setAddComment() {
+        this.setState({ isAddCommentOpen: !this.state.isAddCommentOpen });
+    }
+    async setViewComments(pid) {
+        let data = await this.viewComments(pid);
+        this.setState({ isViewCommentsOpen: !this.state.isViewCommentsOpen, allComments: data });
     }
     fetchFriends() {
         var h = this;
@@ -407,13 +454,59 @@ class FeedComponent extends Component {
                 </Media>
             );
         }
+        function RenderAddComment({h,pid}){
+            return (
+                <Form onSubmit={() => {h.addComment(pid);}}>
+                        <FormGroup>
+                                <Label htmlFor="mycomment">Comment</Label>
+                                <Input type="text" id="mycomment"
+                                    value={localStorage.getItem('customComment')} onChange={(event) => {localStorage.setItem('customComment',event.target.value)}} required />
+                                <br /><Button type="submit" value="submit" color="primary">Done</Button><br />
+                            </FormGroup>
+                        </Form>
+            );
+        }
+        function RenderAllComments({ h,pid }) {
+            let comments = h.state.allComments;
+            // console.log(comments);
+            if(comments.length){
+            return (<div className="container"> {comments.map((p) =>
+                <>
+                    <Card>
+                    <CardBody>
+                    <CardSubtitle style={{ marginLeft: 80 }}>{"Posted By: " + (p.postedBy == h.props.current ? "You": p.postedBy)}</CardSubtitle>
+                   <CardSubtitle style={{ marginLeft: 80 }}>{p.postedAt}</CardSubtitle>
+                    <br/><CardText><b>{p.comment}</b></CardText>
+                </CardBody>
+                    </Card><br />
+                </>
+                
+            )} </div>);
+            }
+            return (<div className="container">No Comments!</div>);
+        }
+
         function RenderPost({ post, h }) {
             return (
                 <CardBody>
                     <CardTitle>{post.heading}</CardTitle>
                     <CardSubtitle>{"Posted By: " + post.username}</CardSubtitle>
                     <br /><br /><CardSubtitle style={{ marginLeft: 800 }}>{post.postedAt}</CardSubtitle>
-                    <br /><CardText>{post.description}</CardText>
+                    <br /><CardText>{post.description}</CardText><br/>
+                    <Button outline color="primary" onClick={() => {h.setAddComment(post._id);}}><span className="fa fa-pencil-square-o fa-lg"></span> Add a comment</Button>
+                    <span>  </span><Button outline color="primary" onClick={() => { h.setViewComments(post._id);}}><span className="fa fa-list fa-lg"></span> View Comments</Button><br/>
+                    <Modal isOpen={h.state.isAddCommentOpen} toggle={() => {h.setAddComment(post._id);}}>
+                        <ModalHeader toggle={() => {h.setAddComment(post._id);}}>Add a comment!</ModalHeader>
+                        <ModalBody>
+                        <RenderAddComment h = {h} pid={post._id}/>
+                        </ModalBody>
+                    </Modal>
+                    <Modal isOpen={h.state.isViewCommentsOpen} toggle={() => {h.setViewComments(post._id);}}>
+                        <ModalHeader toggle={() => {h.setViewComments(post._id);}}>Comments</ModalHeader>
+                        <ModalBody>
+                        <RenderAllComments h = {h} pid={post._id}/> 
+                        </ModalBody>
+                    </Modal>
                 </CardBody>
             );
 

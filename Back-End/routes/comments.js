@@ -35,7 +35,7 @@ router.route('/:postId')
                     next();
                 }
                 else {
-                    Comments.create({ comment: req.body.comment })
+                    Comments.create({ comment: req.body.comment, postedBy: req.body.postedBy })
                         .then((c) => {
                             post.comments.push(c._id);
                             post.save();

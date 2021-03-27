@@ -26,12 +26,31 @@ class UserPostsComponent extends Component {
             error: '',
             postId: 0,
             bio: "",
+            isViewCommentsOpen: false,
+            allComments: [],
             isBioOpen: false
         }
     }
     componentDidMount() {
         this.myPosts();
         this.fetchUser();
+    }
+    async viewComments(PostId){
+        let res = await fetch("/comments/" + PostId, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        });
+        if(res.status == 200){
+        const data = await res.json();
+        return data.comments;}
+        return [];
+    }
+    async setViewComments(pid) {
+        let data = await this.viewComments(pid);
+        this.setState({ isViewCommentsOpen: !this.state.isViewCommentsOpen, allComments: data });
     }
     addToBio() {
         var h = this;
@@ -202,6 +221,25 @@ class UserPostsComponent extends Component {
             </div>
             );
         }
+        function RenderAllComments({ h,pid }) {
+            let comments = h.state.allComments;
+            // console.log(comments);
+            if(comments.length){
+            return (<div className="container"> {comments.map((p) =>
+                <>
+                    <Card>
+                    <CardBody>
+                    <CardSubtitle style={{ marginLeft: 80 }}>{"Posted By: " + (p.postedBy == h.props.current ? "You": p.postedBy)}</CardSubtitle>
+                   <CardSubtitle style={{ marginLeft: 80 }}>{p.postedAt}</CardSubtitle>
+                    <br/><CardText><b>{p.comment}</b></CardText>
+                </CardBody>
+                    </Card><br />
+                </>
+                
+            )} </div>);
+            }
+            return (<div className="container">No Comments!</div>);
+        }
         function RenderCard({ post, h }) {
             return (
                 <CardBody>
@@ -209,7 +247,14 @@ class UserPostsComponent extends Component {
                     <CardSubtitle>Posted By: YOU </CardSubtitle>
                     <Button style={{ marginLeft: 800 }} outline color="danger" onClick={() => { h.setState({ postId: post._id }, () => { h.delete(); }); }} ><span className="fa fa-trash fa-lg"></span></Button>
                     <br /><br /><CardSubtitle style={{ marginLeft: 800 }}>{post.postedAt}</CardSubtitle>
-                    <br /><CardText>{post.description}</CardText>
+                    <br /><CardText>{post.description}</CardText><br/>
+                    <Button outline color="primary" onClick={() => { h.setViewComments(post._id);}}><span className="fa fa-list fa-lg"></span> View Comments</Button><br/>
+                    <Modal isOpen={h.state.isViewCommentsOpen} toggle={() => {h.setViewComments(post._id);}}>
+                        <ModalHeader toggle={() => {h.setViewComments(post._id);}}>Comments</ModalHeader>
+                        <ModalBody>
+                        <RenderAllComments h = {h} pid={post._id}/> 
+                        </ModalBody>
+                    </Modal>
                 </CardBody>
             );
 

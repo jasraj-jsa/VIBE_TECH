@@ -10,6 +10,9 @@ var CommentSchema = new Schema({
     postedAt: {
         type: String,
         default: now.format("MMMM Do YYYY") + " " + now.format("h:mm:ss a")
+    },
+    postedBy: {
+        type: String
     }
 
 });
