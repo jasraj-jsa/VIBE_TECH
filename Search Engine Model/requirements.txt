@@ -60,7 +60,7 @@ matplotlib==3.4.1
 mccabe==0.6.1
 mistune==0.8.3
 networkx==2.5.1
-numpy==1.19.5
+numpy==1.22.0
 oauthlib==3.1.0
 omniture @ git+git://github.com/stdbrouw/python-omniture.git@3ddc3b74ca9ca358e0aae4669fca78c47d7358c6
 openpyxl==2.5.8
