@@ -38,7 +38,7 @@ jdcal==1.4.1
 jedi==0.18.0
 jieba==0.42.1
 Jinja2==2.11.3
-joblib==1.0.1
+joblib==1.2.0
 Keras==2.4.3
 keras-bert==0.86.0
 keras-embed-sim==0.8.0
