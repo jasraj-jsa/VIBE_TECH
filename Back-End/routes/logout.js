@@ -1,3 +1,26 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a608bfb5caf18df8c3c41f8306824a8313ff7c0c3010e7dd97afc5ff1f12db67
-size 829
+var express = require('express');
+var router = express.Router();
+var Users = require('../models/users');
+
+router.route('/')
+    .get((req, res, next) => {
+        Users.findOne({ username: 'admin' })
+            .then((user) => {
+                if (user.length == 0) {
+                    res.statusCode = 400;
+                    res.send();
+                    next();
+                }
+                else {
+                    Users.findByIdAndUpdate({ _id: user._id }, { loggedIn: false, currentUser: '' }, { new: true }, (err, model) => {
+                        if (err)
+                            console.log(err);
+                        res.statusCode = 200;
+                        res.send();
+                        next();
+                    });
+                }
+            })
+    })
+
+module.exports = router;

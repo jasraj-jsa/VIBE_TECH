@@ -1,3 +1,33 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8da9681def716acf6d6151344647cfc256402b58c5bbc9017ee34ec202f011d8
-size 1334
+const jwt = require('jsonwebtoken');
+const secret = "SUIT_UP!";
+const Users = require("../models/users");
+const withAuth = function (req, res, next) {
+    const token = req.cookies.token;
+    if (!token) {
+        res.status(401).send('Unauthorized: No token provided');
+    } else {
+        jwt.verify(token, secret, function (err, decoded) {
+            if (err) {
+                res.status(401).send('Unauthorized: Invalid token');
+            } else {
+                Users.find({ username: 'admin' })
+                    .then((users) => {
+                        if (users.length == 0) {
+                            res.status(401).send('Unauthorized: Invalid token');
+                        }
+                        else {
+                            if (users[0].loggedIn) {
+                                Users.findByIdAndUpdate({ _id: users[0]._id }, { currentUser: decoded.username }, { new: true }, (err, callback) => { });
+                                req.username = decoded.username;
+                                next();
+                            }
+                            else {
+                                res.status(401).send('Unauthorized: Invalid token');
+                            }
+                        }
+                    })
+            }
+        });
+    }
+}
+module.exports = withAuth;

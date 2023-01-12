@@ -1,3 +1,29 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:89b39d1610eff0894b23482672d6db3d026840a84a64bc8a57f5e10e3eaa730b
-size 641
+{
+  "name": "vibe",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "content-based-recommender": "^1.4.0",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "google-it": "^1.6.2",
+    "http": "*",
+    "http-errors": "~1.6.3",
+    "https": "^1.0.0",
+    "jade": "~1.11.0",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
+    "mongoose": "^5.9.6",
+    "morgan": "~1.9.1",
+    "nodemon": "^2.0.2",
+    "request": "^2.88.2",
+    "requests": "^0.3.0",
+    "uuid": "^3.4.0"
+  }
+}

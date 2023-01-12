@@ -1,3 +1,44 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:eba7872846c03a722cf8600b04b927d5ee8e90f12ce38c1c8e74cc05ab725469
-size 1058
+{
+  "name": "vibe",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": "http://localhost:5000",
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "auth0-js": "^9.12.2",
+    "bootstrap": "^4.4.1",
+    "bootstrap-social": "^5.1.1",
+    "content-based-recommender": "^1.4.0",
+    "font-awesome": "^4.7.0",
+    "light-toast": "^0.2.3",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "react-popper": "^1.3.7",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.4.0",
+    "reactstrap": "^8.4.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

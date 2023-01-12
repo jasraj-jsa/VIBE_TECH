@@ -1,3 +1,39 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2ab09508dd6ff26c4ec0a90010bb02f448348e2588046823dcca5aad0fcf1213
-size 1356
+var express = require('express');
+var router = express.Router();
+const ContentBasedRecommender = require('content-based-recommender');
+const bodyParser = require("body-parser");
+router.use(bodyParser.json());
+
+router.route("/:username")
+    .post((req, res, next) => {
+        const recommender = new ContentBasedRecommender({
+            minScore: 0.1,
+            maxSimilarDocuments: 25
+        });
+        const documents = req.body.allheadings;
+        const documents1 = req.body.alldesc;
+        recommender.train(documents);
+        const similar1 = recommender.getSimilarDocuments(req.params.username, 0);
+        recommender.train(documents1);
+        const similar2 = recommender.getSimilarDocuments(req.params.username, 0);
+        var s1 = similar1;
+        var output = s1.filter(value => similar2.includes(value));
+        if (output.length == 0) {
+            if (similar2.length == 0) {
+                if (similar1.length == 0) {
+                    res.status(200).json({ output: "" });
+                }
+                else {
+                    res.status(200).json({ output: similar1 });
+                }
+            }
+            else {
+                res.status(200).json({ output: similar2 })
+            }
+        }
+        else {
+            res.status(200).json({ output: output });
+        }
+    })
+
+module.exports = router;

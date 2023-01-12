@@ -1,3 +1,32 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:4027f4901139d0cc845ca1d03cb005db227cd1451eb19957da6b845860b25866
-size 679
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+const Comments = require("../models/comments");
+var moment = require("moment");
+const now = moment();
+var PostSchema = new Schema({
+    heading: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    postedAt: {
+        type: String,
+        default: now.format("MMMM Do YYYY") + " " + now.format("h:mm:ss a")
+    },
+    comments: [{
+        type: Schema.ObjectId,
+        ref: Comments
+    }],
+    likedBy: {
+        type: Array,
+        default: []
+    }
+
+
+});
+
+var Posts = mongoose.model("Post", PostSchema);
+module.exports = Posts;
