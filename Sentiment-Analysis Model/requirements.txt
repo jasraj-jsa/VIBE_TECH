@@ -7,7 +7,7 @@ beautifulsoup4==4.9.3
 bs4==0.0.1
 cachetools==4.2.1
 cchardet==2.1.7
-certifi==2020.12.5
+certifi==2022.12.7
 chardet==4.0.0
 # Editable install with no version control (citrite==0.0.2)
 -e /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages
